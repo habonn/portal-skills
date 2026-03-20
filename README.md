@@ -25,6 +25,8 @@ curl -sL https://raw.githubusercontent.com/habonn/portal-skills/main/install.sh 
 |-------|-------------|
 | [commit](./commit/SKILL.md) | Smart git commit workflow with Conventional Commits format |
 | [e2e](./e2e/SKILL.md) | Create/update Playwright E2E tests using Page Object Model |
+| [test-go](./test-go/SKILL.md) | Generate Go unit tests with table-driven patterns (80%+ coverage) |
+| [test-ts](./test-ts/SKILL.md) | Generate TypeScript/Vitest unit tests with mocking (80%+ coverage) |
 
 ## License
 
