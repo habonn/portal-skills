@@ -5,38 +5,33 @@ A collection of AI agent skills for Kiro IDE, designed for portal development wo
 ## Quick Start
 
 ```bash
-git clone https://github.com/habonn/portal-skills.git
-cd portal-skills
-chmod +x install.sh
-./install.sh
+curl -sL https://raw.githubusercontent.com/habonn/portal-skills/main/install.sh | bash
 ```
 
 This opens an interactive menu to select which skills to install. Skills and hooks are installed together - ready to use immediately.
 
 ## Installation Options
 
-**Clone and install (recommended):**
+**Interactive install (recommended):**
 ```bash
-git clone https://github.com/habonn/portal-skills.git
-cd portal-skills
-chmod +x install.sh
-./install.sh
+curl -sL https://raw.githubusercontent.com/habonn/portal-skills/main/install.sh | bash
 ```
 
-**One-liner via curl:**
+**Install specific skill directly:**
 ```bash
-curl -s https://raw.githubusercontent.com/habonn/portal-skills/main/install.sh | bash
-```
-
-**Install specific skill:**
-```bash
-./install.sh commit
+curl -sL https://raw.githubusercontent.com/habonn/portal-skills/main/install.sh | bash -s -- commit
 ```
 
 **Install multiple skills:**
 ```bash
-./install.sh commit other-skill
+curl -sL https://raw.githubusercontent.com/habonn/portal-skills/main/install.sh | bash -s -- commit other-skill
 ```
+
+**Alternative - npx skills (no hooks):**
+```bash
+npx skills add https://github.com/habonn/portal-skills
+```
+Note: This installs all skills but without hooks. Use the curl method for full experience.
 
 ## Available Skills
 
