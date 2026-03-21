@@ -39,7 +39,7 @@ EOF
   },
   "then": {
     "type": "askAgent",
-    "prompt": "Generate my daily commit summary. Read the config from ~/.daily-commit-summary.yaml to get the list of repositories. For each repo, run 'git log' to get today's commits (from 08:00 to now). Categorize commits by type (feat, fix, docs, etc.) and generate a formatted Markdown summary grouped by project. If config file doesn't exist, ask me which repos to scan."
+    "prompt": "Generate my daily commit summary following the daily-commit-summary skill. CRITICAL STEPS: 1) Read config from ~/.daily-commit-summary.yaml to get repositories. 2) Run 'git log' for each repo to get today's commits (08:00 to now). 3) TRANSFORM each commit into a human-readable task using Conventional Commits mapping (feat→Implemented, fix→Fixed, refactor→Refactored, etc.). 4) Output MUST include 'Summary Task Daily' section at the TOP with transformed tasks, then show commit details below. Skip empty commits like []. If config doesn't exist, ask which repos to scan."
   }
 }
 EOF
