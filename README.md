@@ -9,7 +9,7 @@ A collection of AI agent skills for [Kiro IDE](https://kiro.dev), designed to en
 npx skills add habonn/portal-skills
 
 # Step 2: Install Kiro hooks
-curl -fsSL https://raw.githubusercontent.com/habonn/portal-skills/main/install.sh | bash
+bash <(curl -fsSL https://raw.githubusercontent.com/habonn/portal-skills/main/install.sh)
 ```
 
 ### Install Specific Skills
@@ -21,13 +21,6 @@ npx skills add habonn/portal-skills@e2e
 
 # Then add Kiro hooks for selected skills
 curl -fsSL https://raw.githubusercontent.com/habonn/portal-skills/main/install.sh | bash -s -- commit e2e
-```
-
-### Interactive Installation
-
-```bash
-# Run interactively to select which skills to install
-bash <(curl -fsSL https://raw.githubusercontent.com/habonn/portal-skills/main/install.sh)
 ```
 
 ## Available Skills
