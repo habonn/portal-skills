@@ -1,18 +1,9 @@
 #!/bin/bash
 
-# Portal Skills Installer
-# Interactive installer for Kiro IDE skills and hooks
+# Portal Skills - Kiro Hooks Installer
+# Installs Kiro hooks for skills already installed via `npx skills add`
 
 set -e
-
-REPO_URL="https://github.com/habonn/portal-skills"
-TEMP_DIR=$(mktemp -d)
-
-# Cleanup on exit
-cleanup() {
-  rm -rf "$TEMP_DIR"
-}
-trap cleanup EXIT
 
 # Function to create hook for a skill
 create_hook() {
@@ -35,6 +26,7 @@ create_hook() {
   }
 }
 EOF
+      echo "  ✓ Hook installed: commit"
       ;;
     "daily-commit-summary")
       cat > .kiro/hooks/daily-commit-summary.kiro.hook << 'EOF'
@@ -51,6 +43,7 @@ EOF
   }
 }
 EOF
+      echo "  ✓ Hook installed: daily-commit-summary"
       ;;
     "e2e")
       cat > .kiro/hooks/e2e.kiro.hook << 'EOF'
@@ -67,6 +60,7 @@ EOF
   }
 }
 EOF
+      echo "  ✓ Hook installed: e2e"
       ;;
     "test-go")
       cat > .kiro/hooks/test-go.kiro.hook << 'EOF'
@@ -83,6 +77,7 @@ EOF
   }
 }
 EOF
+      echo "  ✓ Hook installed: test-go"
       ;;
     "test-ts")
       cat > .kiro/hooks/test-ts.kiro.hook << 'EOF'
@@ -99,106 +94,62 @@ EOF
   }
 }
 EOF
+      echo "  ✓ Hook installed: test-ts"
+      ;;
+    *)
+      echo "  ⚠️  No hook defined for: $skill"
       ;;
   esac
 }
 
-echo "🚀 Portal Skills Installer"
+echo "🚀 Portal Skills - Kiro Hooks Installer"
 echo ""
 
-# Clone repo
-echo "Fetching skills..."
-git clone --quiet "$REPO_URL" "$TEMP_DIR"
-
-# Auto-detect available skills (folders with SKILL.md)
-SKILLS=()
-for dir in "$TEMP_DIR"/*/; do
-  if [ -f "${dir}SKILL.md" ]; then
-    skill_name=$(basename "$dir")
-    SKILLS+=("$skill_name")
-  fi
-done
-
-if [ ${#SKILLS[@]} -eq 0 ]; then
-  echo "❌ No skills found in repository"
-  exit 1
+# Auto-detect skills installed by `npx skills add` in .agents/skills/
+INSTALLED_SKILLS=()
+if [ -d ".agents/skills" ]; then
+  for dir in .agents/skills/*/; do
+    if [ -d "$dir" ]; then
+      skill_name=$(basename "$dir")
+      INSTALLED_SKILLS+=("$skill_name")
+    fi
+  done
 fi
 
 # Check for specific skill argument
 if [ -n "$1" ]; then
-  if [ "$1" = "all" ]; then
-    SELECTED_SKILLS=("${SKILLS[@]}")
-  else
-    SELECTED_SKILLS=("$@")
-  fi
+  # User specified skills manually
+  SELECTED_SKILLS=("$@")
+  echo "Installing hooks for specified skills..."
+elif [ ${#INSTALLED_SKILLS[@]} -gt 0 ]; then
+  # Auto-detected skills from .agents/skills/
+  SELECTED_SKILLS=("${INSTALLED_SKILLS[@]}")
+  echo "Detected skills installed via 'npx skills add':"
+  for skill in "${INSTALLED_SKILLS[@]}"; do
+    echo "  - $skill"
+  done
+  echo ""
+  echo "Installing Kiro hooks for these skills..."
 else
-  # Check if running interactively (stdin is terminal)
-  if [ -t 0 ]; then
-    # Interactive selection
-    echo ""
-    echo "Available skills:"
-    for i in "${!SKILLS[@]}"; do
-      echo "  $((i+1)). ${SKILLS[$i]}"
-    done
-    echo "  a. All skills"
-    echo ""
-    read -p "Select skills to install (e.g., 1 2 or 'a' for all): " selection
-    
-    if [ "$selection" = "a" ] || [ "$selection" = "A" ]; then
-      SELECTED_SKILLS=("${SKILLS[@]}")
-    else
-      SELECTED_SKILLS=()
-      for num in $selection; do
-        idx=$((num-1))
-        if [ $idx -ge 0 ] && [ $idx -lt ${#SKILLS[@]} ]; then
-          SELECTED_SKILLS+=("${SKILLS[$idx]}")
-        fi
-      done
-    fi
-  else
-    # Non-interactive (piped) - show available skills and exit
-    echo ""
-    echo "Available skills:"
-    for skill in "${SKILLS[@]}"; do
-      echo "  - $skill"
-    done
-    echo ""
-    echo "To install specific skills, run:"
-    echo "  curl -fsSL $REPO_URL/raw/main/install.sh | bash -s -- commit e2e"
-    echo ""
-    echo "Or run interactively:"
-    echo "  bash <(curl -fsSL $REPO_URL/raw/main/install.sh)"
-    exit 0
-  fi
-fi
-
-# Validate selection
-if [ ${#SELECTED_SKILLS[@]} -eq 0 ]; then
-  echo "❌ No skills selected"
+  # No skills found
+  echo "❌ No skills detected."
+  echo ""
+  echo "First, install skills using:"
+  echo "  npx skills add habonn/portal-skills"
+  echo ""
+  echo "Or specify skills manually:"
+  echo "  curl -fsSL https://raw.githubusercontent.com/habonn/portal-skills/main/install.sh | bash -s -- commit e2e"
   exit 1
 fi
 
-# Install selected skills
+# Install hooks for selected skills
 echo ""
 for skill in "${SELECTED_SKILLS[@]}"; do
-  if [ -d "$TEMP_DIR/$skill" ]; then
-    echo "Installing $skill..."
-    
-    # Create skill directory and copy
-    mkdir -p ".kiro/skills/$skill"
-    cp "$TEMP_DIR/$skill/SKILL.md" ".kiro/skills/$skill/"
-    
-    # Create hook for this skill
-    create_hook "$skill"
-    
-    echo "  ✓ Skill + Hook installed"
-  else
-    echo "⚠️  Skill '$skill' not found, skipping"
-  fi
+  create_hook "$skill"
 done
 
 echo ""
-echo "✅ Installation complete!"
+echo "✅ Kiro hooks installed!"
 echo ""
 echo "Usage:"
 echo "  • Chat: Ask Kiro naturally (e.g., 'commit my changes')"
