@@ -5,16 +5,28 @@ A collection of AI agent skills for [Kiro IDE](https://kiro.dev), designed to en
 ## Quick Start
 
 ```bash
+# Step 1: Install from skills registry (universal support for multiple AI agents)
+npx skills add habonn/portal-skills
+
+# Step 2: Install Kiro hooks
 curl -fsSL https://raw.githubusercontent.com/habonn/portal-skills/main/install.sh | bash
 ```
 
-This shows available skills. To install specific skills:
+### Install Specific Skills
 
 ```bash
-# Install specific skills
-curl -fsSL https://raw.githubusercontent.com/habonn/portal-skills/main/install.sh | bash -s -- commit e2e
+# Install specific skills only
+npx skills add habonn/portal-skills@commit
+npx skills add habonn/portal-skills@e2e
 
-# Or run interactively to select skills
+# Then add Kiro hooks for selected skills
+curl -fsSL https://raw.githubusercontent.com/habonn/portal-skills/main/install.sh | bash -s -- commit e2e
+```
+
+### Interactive Installation
+
+```bash
+# Run interactively to select which skills to install
 bash <(curl -fsSL https://raw.githubusercontent.com/habonn/portal-skills/main/install.sh)
 ```
 
