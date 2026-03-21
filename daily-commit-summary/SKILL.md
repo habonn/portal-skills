@@ -7,6 +7,33 @@ description: Generate daily task summaries by analyzing git commits across multi
 
 Scan git commits across configured repositories, analyze them, and generate a meaningful daily task summary for standup reports or timesheets.
 
+## ⚠️ MANDATORY: Tasks Section is REQUIRED
+
+**YOU MUST ALWAYS OUTPUT THE "✅ Tasks" SECTION FIRST.**
+
+This is NOT optional. Every output MUST start with analyzed tasks before showing commit details.
+
+**WRONG OUTPUT (missing Tasks):**
+```
+📊 Daily Commit Summary
+backoffice-portal-next (3 commits)
+🐛 fix
+- b0b0352 fix(notification-template)...
+```
+
+**CORRECT OUTPUT (Tasks section FIRST):**
+```
+📋 Daily Commit Summary
+Date: Saturday, March 21, 2026 (08:00 - now)
+
+✅ Tasks (Analyzed from commits)
+- Fixed notification template to display Thai month names correctly
+- Updated gitignore and mock data for testing
+
+📝 Commits Detail
+...
+```
+
 ## When to Use This Skill
 
 Use this skill when the user:
@@ -44,17 +71,17 @@ Once configured, just ask:
 - "What did I do today?" or "/daily-commit-summary"
 - Kiro reads your config and scans ALL repos in one command
 
-## CRITICAL: Output Format
+## 🚨 CRITICAL: Output Format (MUST FOLLOW EXACTLY)
 
-**IMPORTANT: Kiro MUST ALWAYS generate a "Tasks" section FIRST by analyzing and rewriting commits into clear, human-readable sentences.**
+**STOP! Before outputting anything, you MUST:**
+1. Read ALL commits first
+2. Analyze and convert them into human-readable task sentences
+3. Output the Tasks section FIRST
+4. Then show commit details
 
-The Tasks section is the PRIMARY output. It should:
-1. Analyze all commits from the day
-2. Rewrite technical commit messages into clear task descriptions
-3. Group related commits into single tasks
-4. Present as a consolidated daily task summary
+**DO NOT just list commits grouped by type. You MUST analyze and rewrite them as tasks.**
 
-### Required Output Structure
+### EXACT Output Template (Copy This Structure)
 
 ```
 📋 Daily Commit Summary
@@ -62,29 +89,28 @@ Date: [Day], [Month] [Date], [Year] (08:00 - now)
 
 ---
 
-## ✅ Tasks (Analyzed from commits)
+✅ Tasks (Analyzed from commits)
 
-- [Clear sentence describing what was accomplished]
-- [Clear sentence describing what was accomplished]
-- [Clear sentence describing what was accomplished]
+- [Rewrite commit as clear task sentence - e.g., "Fixed notification template to display Thai month names"]
+- [Rewrite commit as clear task sentence - e.g., "Updated project configuration and mock data"]
 
 ---
 
-## 📝 Commits Detail
+📝 Commits Detail
 
 🚀 [repository-name]
 
 | Type | Commit | Hash | Time |
 |------|--------|------|------|
-| fix | description | hash | HH:MM |
-| chore | description | hash | HH:MM |
+| 🔧 fix | description | hash | HH:MM |
+| 🔨 chore | description | hash | HH:MM |
 
 📊 Summary by Type
 
 | Type | Count |
 |------|-------|
-| fix | X |
-| chore | X |
+| 🔧 fix | X |
+| 🔨 chore | X |
 | Total | X |
 
 📁 Repositories with No Activity Today
@@ -93,7 +119,34 @@ Date: [Day], [Month] [Date], [Year] (08:00 - now)
 
 ---
 
-[Brief closing comment]
+[Brief closing comment about the day's work]
+```
+
+### ❌ WRONG vs ✅ CORRECT Examples
+
+**❌ WRONG (This is what you're doing - NO TASKS SECTION):**
+```
+📊 Daily Commit Summary
+backoffice-portal-next (3 commits)
+🐛 fix
+- b0b0352 fix(notification-template): update mock Thai name
+🔧 chore
+- 551c5ef chore: update gitignore
+```
+
+**✅ CORRECT (Tasks section FIRST, then details):**
+```
+📋 Daily Commit Summary
+Date: Saturday, March 21, 2026 (08:00 - now)
+
+✅ Tasks (Analyzed from commits)
+- Fixed notification template to correctly display Thai month names in mock data
+- Updated project configuration files (gitignore) and mock data for testing
+
+📝 Commits Detail
+🚀 backoffice-portal-next
+| Type | Commit | Hash | Time |
+...
 ```
 
 ### Example: Your Actual Commits → Analyzed Tasks
@@ -217,9 +270,20 @@ User: "/daily-commit-summary"
 
 1. Read `~/.daily-commit-summary.yaml` config
 2. Scan ALL configured repos for today's commits
-3. **ANALYZE commits and generate Tasks section FIRST**
-4. Show commit details below
-5. Display summary
+3. **⚠️ STOP AND ANALYZE: Convert commits into task sentences**
+4. **OUTPUT THE ✅ Tasks SECTION FIRST - THIS IS MANDATORY**
+5. Then show 📝 Commits Detail below
+6. Display summary
+
+## ⚠️ FINAL REMINDER
+
+**NEVER output just a list of commits grouped by type.**
+
+**ALWAYS output:**
+1. ✅ Tasks section FIRST (analyzed, human-readable sentences)
+2. 📝 Commits Detail section SECOND (raw commit data)
+
+If your output doesn't have "✅ Tasks (Analyzed from commits)" at the top, YOU ARE DOING IT WRONG.
 
 ## Tips
 
