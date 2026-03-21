@@ -126,7 +126,11 @@ fi
 
 # Check for specific skill argument
 if [ -n "$1" ]; then
-  SELECTED_SKILLS=("$@")
+  if [ "$1" = "all" ]; then
+    SELECTED_SKILLS=("${SKILLS[@]}")
+  else
+    SELECTED_SKILLS=("$@")
+  fi
 else
   # Check if running interactively (stdin is terminal)
   if [ -t 0 ]; then
