@@ -44,75 +44,102 @@ Once configured, just ask:
 - "What did I do today?" or "/daily-commit-summary"
 - Kiro reads your config and scans ALL repos in one command
 
-## Output Format
+## CRITICAL: Output Format
 
-Kiro MUST analyze commits and generate a **Tasks** section with meaningful summaries.
+**IMPORTANT: Kiro MUST ALWAYS generate a "Tasks" section FIRST by analyzing and rewriting commits into clear, human-readable sentences.**
+
+The Tasks section is the PRIMARY output. It should:
+1. Analyze all commits from the day
+2. Rewrite technical commit messages into clear task descriptions
+3. Group related commits into single tasks
+4. Present as a consolidated daily task summary
 
 ### Required Output Structure
 
 ```
-📋 Daily Commit Summary — [Day], [Month] [Date], [Year]
-
-## Tasks
-- [Analyzed task 1]
-- [Analyzed task 2]
-- [Analyzed task 3]
+📋 Daily Commit Summary
+Date: [Day], [Month] [Date], [Year] (08:00 - now)
 
 ---
 
-## Commits Detail
+## ✅ Tasks (Analyzed from commits)
 
-[repository-name]
+- [Clear sentence describing what was accomplished]
+- [Clear sentence describing what was accomplished]
+- [Clear sentence describing what was accomplished]
+
+---
+
+## 📝 Commits Detail
+
+🚀 [repository-name]
+
+| Type | Commit | Hash | Time |
+|------|--------|------|------|
+| fix | description | hash | HH:MM |
+| chore | description | hash | HH:MM |
+
+📊 Summary by Type
 
 | Type | Count |
 |------|-------|
-| feat | X |
 | fix | X |
+| chore | X |
+| Total | X |
 
-Commits:
-- `hash` **type(scope)**: message
-- `hash` **type**: message
+📁 Repositories with No Activity Today
+- repo-1
+- repo-2
 
 ---
 
-Total: X commits in Y repositories
+[Brief closing comment]
 ```
 
-### Example 1: Based on your actual commits
+### Example: Your Actual Commits → Analyzed Tasks
 
-**Raw commits:**
+**Raw commits from today:**
 ```
-b0b0352 fix(notification-template): update mock Thai name to include month
-551c5ef chore: update gitignore and mock data
+b0b0352 fix(notification-template): update mock Thai name to include month (20:30)
+551c5ef chore: update gitignore and mock data (12:50)
 f344b80 [] (WIP/empty commit)
 ```
 
-**Analyzed output:**
-```
-📋 Daily Commit Summary — Saturday, March 21, 2026
+**CORRECT Output with Tasks section:**
 
-## Tasks
-- Fixed notification template to display Thai month names correctly
-- Updated project configuration and mock data
+```
+📋 Daily Commit Summary
+Date: Saturday, March 21, 2026 (08:00 - now)
 
 ---
 
-## Commits Detail
+## ✅ Tasks (Analyzed from commits)
 
-backoffice-portal-next
+- Fixed notification template to correctly display Thai month names in mock data
+- Updated project configuration files (gitignore) and mock data for testing
+
+---
+
+## 📝 Commits Detail
+
+🚀 backoffice-portal-next
+
+| Type | Commit | Hash | Time |
+|------|--------|------|------|
+| 🔧 fix | notification-template: update mock Thai name to include month | b0b0352 | 20:30 |
+| 🔨 chore | update gitignore and mock data | 551c5ef | 12:50 |
+
+Note: Commit f344b80 appears to have an empty/malformed message.
+
+📊 Summary by Type
 
 | Type | Count |
 |------|-------|
-| fix | 1 |
-| chore | 1 |
-| other | 1 |
+| � fix | 1 |
+| 🔨 chore | 1 |
+| Total | 3 |
 
-Commits:
-- `b0b0352` **fix(notification-template)**: update mock Thai name to include month
-- `551c5ef` **chore**: update gitignore and mock data
-- `f344b80` [] (WIP/empty commit)
-
-Repositories with no commits today:
+📁 Repositories with No Activity Today
 - portal-uam
 - portal-cube
 - portal-backend
@@ -120,70 +147,48 @@ Repositories with no commits today:
 
 ---
 
-Total: 3 commits in 1 active repository
+Looks like a light day focused on the backoffice-portal-next project with notification template fixes and housekeeping updates.
 ```
 
-### Example 2: Multiple related commits (grouped & summarized)
+## Task Analysis Rules
+
+**Kiro MUST analyze commits and rewrite them as clear task sentences:**
+
+### How to Convert Commits → Tasks
+
+| Commit Type | Raw Commit | Analyzed Task Sentence |
+|-------------|------------|------------------------|
+| fix | `fix(notification-template): update mock Thai name to include month` | Fixed notification template to correctly display Thai month names |
+| chore | `chore: update gitignore and mock data` | Updated project configuration and mock data |
+| feat | `feat(auth): add login page` | Implemented login page for user authentication |
+| refactor | `refactor(api): simplify error handling` | Refactored API error handling for better maintainability |
+| docs | `docs(readme): update installation steps` | Updated installation documentation in README |
+
+### Grouping Related Commits
+
+Multiple commits about the same feature should be combined into ONE task:
 
 **Raw commits:**
 ```
-a1b2c3d feat(notification): add preview component
-e4f5g6h feat(notification): implement settings API
-i7j8k9l fix(notification): resolve shadow issue
-m1n2o3p style(notification): adjust card padding
+feat(auth): add login page
+feat(auth): add password validation
+fix(auth): resolve token refresh issue
 ```
 
-**Analyzed output:**
+**Analyzed as ONE task:**
 ```
-📋 Daily Commit Summary — Saturday, March 21, 2026
-
-## Tasks
-- Implemented notification preview feature with settings API
-- Fixed notification UI styling (shadow and padding issues)
-
----
-
-## Commits Detail
-...
+- Implemented user authentication with login page, password validation, and token refresh fix
 ```
 
-### Example 3: Mixed work across repos
+### Task Writing Guidelines
 
-**Raw commits:**
-```
-# backoffice-portal-next
-a1b2c3d feat(auth): add login page
-e4f5g6h feat(auth): implement password reset
+1. **Start with action verb**: "Fixed", "Implemented", "Updated", "Refactored", "Added"
+2. **Be specific**: Include what was changed and why if clear from commit
+3. **Human-readable**: Write for standup reports, not for developers reading code
+4. **Consolidate**: Group related work into single tasks
+5. **Skip noise**: Empty commits or WIP can be noted but not listed as tasks
 
-# portal-backend
-m1n2o3p feat(auth): add OAuth2 endpoints
-q4r5s6t refactor(auth): clean up middleware
-```
-
-**Analyzed output:**
-```
-📋 Daily Commit Summary — Saturday, March 21, 2026
-
-## Tasks
-- Implemented authentication system (login page, password reset, OAuth2 APIs)
-- Refactored auth middleware for better maintainability
-
----
-
-## Commits Detail
-...
-```
-
-## Analysis Rules
-
-Kiro analyzes commits by:
-
-1. **Grouping related commits** - Commits about the same feature/area are combined
-2. **Identifying the main work** - Focus on what was accomplished, not individual changes
-3. **Summarizing intent** - Convert technical commits into business-readable tasks
-4. **Removing noise** - Chore/style commits are summarized briefly or grouped
-
-### Conventional Commits Integration
+## Conventional Commits Integration
 
 This skill understands Conventional Commits format (see `commit/SKILL.md`):
 
@@ -191,55 +196,34 @@ This skill understands Conventional Commits format (see `commit/SKILL.md`):
 <type>(<scope>): <description>
 ```
 
-#### Commit Types & Task Analysis
+### Commit Types → Task Language
 
-| Type | Description | Task Summary Style |
-|------|-------------|-------------------|
-| `feat` | New feature | "Implemented [feature]" / "Added [functionality]" |
-| `fix` | Bug fix | "Fixed [issue]" / "Resolved [problem]" |
-| `docs` | Documentation | "Updated documentation for [area]" |
-| `style` | Code style | Grouped with related changes or "Fixed styling issues" |
-| `refactor` | Code refactor | "Refactored [area] for [benefit]" |
-| `perf` | Performance | "Improved performance of [area]" |
-| `test` | Tests | "Added tests for [feature]" |
-| `build` | Build/deps | "Updated build configuration" / "Upgraded dependencies" |
-| `ci` | CI/CD | "Updated CI/CD pipeline" |
-| `chore` | Maintenance | "Updated project configuration" |
+| Type | Task Prefix |
+|------|-------------|
+| `feat` | "Implemented" / "Added" / "Created" |
+| `fix` | "Fixed" / "Resolved" / "Corrected" |
+| `docs` | "Updated documentation for" / "Documented" |
+| `style` | "Improved styling" / "Fixed formatting" |
+| `refactor` | "Refactored" / "Restructured" / "Improved" |
+| `perf` | "Optimized" / "Improved performance of" |
+| `test` | "Added tests for" / "Improved test coverage" |
+| `build` | "Updated build configuration" / "Upgraded" |
+| `ci` | "Updated CI/CD pipeline" |
+| `chore` | "Updated" / "Maintained" / "Cleaned up" |
 
-#### Scope-Based Grouping
+## Workflow
 
-Commits with the same scope are grouped together:
+User: "/daily-commit-summary"
 
-```
-feat(auth): add login page
-feat(auth): add password reset
-fix(auth): resolve token refresh issue
-```
-→ **Task:** "Implemented authentication system with login and password reset"
-
-### Commit Analysis Examples
-
-| Raw Commits | Analyzed Task |
-|-------------|---------------|
-| `chore: update gitignore and mock data` | Updated project configuration and test data |
-| `feat(auth): add login page` + `feat(auth): add auth API` + `fix(auth): token issue` | Implemented user authentication system |
-| `refactor(user): clean up service` + `perf(user): optimize queries` | Refactored user service for better performance |
-| `docs(readme): update install` + `docs(api): add endpoints` | Updated project documentation |
-| `fix(button): alignment` + `style(button): adjust padding` | Fixed button UI styling issues |
-
-## Workflow Example
-
-User: "/daily-commit-summary" (or "What did I do today?")
-
-1. Kiro reads `~/.daily-commit-summary.yaml` config
-2. Scans ALL configured repos for today's commits
-3. **Analyzes and groups related commits**
-4. **Generates meaningful task descriptions**
-5. Displays a clean summary ready for standup
+1. Read `~/.daily-commit-summary.yaml` config
+2. Scan ALL configured repos for today's commits
+3. **ANALYZE commits and generate Tasks section FIRST**
+4. Show commit details below
+5. Display summary
 
 ## Tips
 
-- Ask at end of workday to capture all commits
-- Related commits across repos will be grouped together
-- Use conventional commit prefixes for better analysis
-- Ask Kiro to adjust the summary if needed
+- The Tasks section is for standup reports - make it readable
+- Group related commits into single meaningful tasks
+- Use clear action verbs
+- Skip empty/WIP commits from tasks (but note them in details)
