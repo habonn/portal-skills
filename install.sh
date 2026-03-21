@@ -36,6 +36,70 @@ create_hook() {
 }
 EOF
       ;;
+    "daily-commit-summary")
+      cat > .kiro/hooks/daily-commit-summary.kiro.hook << 'EOF'
+{
+  "name": "Daily Commit Summary",
+  "version": "1.0.0",
+  "description": "Generate daily task summary from commits across all configured repos",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Generate my daily commit summary. Read the config from ~/.daily-commit-summary.yaml to get the list of repositories. For each repo, run 'git log' to get today's commits (from 08:00 to now). Categorize commits by type (feat, fix, docs, etc.) and generate a formatted Markdown summary grouped by project. If config file doesn't exist, ask me which repos to scan."
+  }
+}
+EOF
+      ;;
+    "e2e")
+      cat > .kiro/hooks/e2e.kiro.hook << 'EOF'
+{
+  "name": "E2E Test Generator",
+  "version": "1.0.0",
+  "description": "Create or update Playwright E2E tests for a module",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Help me create or update E2E tests. First, ask which module I want to test. Then read existing e2e/pages/ files to understand the project's Page Object Model patterns. Create page objects and spec files following the same conventions."
+  }
+}
+EOF
+      ;;
+    "test-go")
+      cat > .kiro/hooks/test-go.kiro.hook << 'EOF'
+{
+  "name": "Go Test Generator",
+  "version": "1.0.0",
+  "description": "Generate Go unit tests with 80%+ coverage",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Help me create or update Go unit tests. Ask which file or folder I want to test. Analyze the source code to identify all functions, branches, and error paths. Generate table-driven tests that cover all execution paths for 80%+ coverage."
+  }
+}
+EOF
+      ;;
+    "test-ts")
+      cat > .kiro/hooks/test-ts.kiro.hook << 'EOF'
+{
+  "name": "TypeScript Test Generator",
+  "version": "1.0.0",
+  "description": "Generate TypeScript/Vitest unit tests with 80%+ coverage",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Help me create or update TypeScript unit tests using Vitest. Ask which file or folder I want to test. Analyze the source code to identify all functions, branches, and async paths. Generate tests that cover all execution paths for 80%+ coverage."
+  }
+}
+EOF
+      ;;
   esac
 }
 
@@ -88,9 +152,19 @@ else
       done
     fi
   else
-    # Non-interactive (piped) - install all skills
-    echo "Installing all skills..."
-    SELECTED_SKILLS=("${SKILLS[@]}")
+    # Non-interactive (piped) - show available skills and exit
+    echo ""
+    echo "Available skills:"
+    for skill in "${SKILLS[@]}"; do
+      echo "  - $skill"
+    done
+    echo ""
+    echo "To install specific skills, run:"
+    echo "  curl -fsSL $REPO_URL/raw/main/install.sh | bash -s -- commit e2e"
+    echo ""
+    echo "Or run interactively:"
+    echo "  bash <(curl -fsSL $REPO_URL/raw/main/install.sh)"
+    exit 0
   fi
 fi
 
