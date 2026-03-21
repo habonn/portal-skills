@@ -46,48 +46,105 @@ Once configured, just ask:
 
 ## Output Format
 
-Kiro analyzes commits and generates meaningful task summaries:
+Kiro MUST analyze commits and generate a **Tasks** section with meaningful summaries.
 
-### Example 1: Single commit
+### Required Output Structure
+
+```
+📋 Daily Commit Summary — [Day], [Month] [Date], [Year]
+
+## Tasks
+- [Analyzed task 1]
+- [Analyzed task 2]
+- [Analyzed task 3]
+
+---
+
+## Commits Detail
+
+[repository-name]
+
+| Type | Count |
+|------|-------|
+| feat | X |
+| fix | X |
+
+Commits:
+- `hash` **type(scope)**: message
+- `hash` **type**: message
+
+---
+
+Total: X commits in Y repositories
+```
+
+### Example 1: Based on your actual commits
 
 **Raw commits:**
 ```
+b0b0352 fix(notification-template): update mock Thai name to include month
 551c5ef chore: update gitignore and mock data
+f344b80 [] (WIP/empty commit)
 ```
 
 **Analyzed output:**
 ```
-📋 Daily Commit Summary - March 21, 2026 (Saturday)
+📋 Daily Commit Summary — Saturday, March 21, 2026
 
-Tasks
-- Updated project configuration and test data
+## Tasks
+- Fixed notification template to display Thai month names correctly
+- Updated project configuration and mock data
 
 ---
-Total: 1 commit across 5 repositories
+
+## Commits Detail
+
+backoffice-portal-next
+
+| Type | Count |
+|------|-------|
+| fix | 1 |
+| chore | 1 |
+| other | 1 |
+
+Commits:
+- `b0b0352` **fix(notification-template)**: update mock Thai name to include month
+- `551c5ef` **chore**: update gitignore and mock data
+- `f344b80` [] (WIP/empty commit)
+
+Repositories with no commits today:
+- portal-uam
+- portal-cube
+- portal-backend
+- portal-backend-cms
+
+---
+
+Total: 3 commits in 1 active repository
 ```
 
 ### Example 2: Multiple related commits (grouped & summarized)
 
 **Raw commits:**
 ```
-a1b2c3d feat: add notification preview component
-e4f5g6h feat: implement notification settings API
-i7j8k9l fix: resolve shadow issue in notification preview
-m1n2o3p style: adjust notification card padding
-q4r5s6t test: add unit tests for notification component
+a1b2c3d feat(notification): add preview component
+e4f5g6h feat(notification): implement settings API
+i7j8k9l fix(notification): resolve shadow issue
+m1n2o3p style(notification): adjust card padding
 ```
 
 **Analyzed output:**
 ```
-📋 Daily Commit Summary - March 21, 2026 (Saturday)
+📋 Daily Commit Summary — Saturday, March 21, 2026
 
-Tasks
+## Tasks
 - Implemented notification preview feature with settings API
-- Fixed UI styling issues in notification component
-- Added unit tests for notification feature
+- Fixed notification UI styling (shadow and padding issues)
 
 ---
-Total: 5 commits across 2 repositories
+
+## Commits Detail
+...
 ```
 
 ### Example 3: Mixed work across repos
@@ -95,25 +152,26 @@ Total: 5 commits across 2 repositories
 **Raw commits:**
 ```
 # backoffice-portal-next
-a1b2c3d feat: add user authentication flow
-e4f5g6h feat: implement login page
-i7j8k9l fix: resolve token refresh issue
+a1b2c3d feat(auth): add login page
+e4f5g6h feat(auth): implement password reset
 
 # portal-backend
-m1n2o3p feat: add OAuth2 endpoints
-q4r5s6t refactor: clean up auth middleware
+m1n2o3p feat(auth): add OAuth2 endpoints
+q4r5s6t refactor(auth): clean up middleware
 ```
 
 **Analyzed output:**
 ```
-📋 Daily Commit Summary - March 21, 2026 (Saturday)
+📋 Daily Commit Summary — Saturday, March 21, 2026
 
-Tasks
-- Implemented user authentication system (frontend login + backend OAuth2 APIs)
-- Refactored authentication middleware for better maintainability
+## Tasks
+- Implemented authentication system (login page, password reset, OAuth2 APIs)
+- Refactored auth middleware for better maintainability
 
 ---
-Total: 5 commits across 2 repositories
+
+## Commits Detail
+...
 ```
 
 ## Analysis Rules
