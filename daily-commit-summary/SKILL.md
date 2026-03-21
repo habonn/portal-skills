@@ -5,7 +5,7 @@ description: Generate daily task summaries from git commits across multiple repo
 
 # Daily Commit Summary Skill
 
-Scan git commits across configured repositories and generate a daily task summary for standup reports or timesheets.
+Scan git commits across configured repositories and generate a simple daily task list for standup reports or timesheets.
 
 ## When to Use This Skill
 
@@ -44,69 +44,74 @@ Once configured, just ask:
 - "What did I do today?" or "/daily-commit-summary"
 - Kiro reads your config and scans ALL repos in one command
 
-Or ask without config:
-
-- "Summarize my commits"
-- "Check commits across ~/projects/portal-api and ~/projects/portal-frontend"
-
-Kiro will run git commands, analyze the commits, and generate a formatted summary.
-
 ## Output Format
 
-Kiro generates a Markdown summary like this:
+Kiro generates a simple task list from commit messages:
 
-```markdown
-# Daily Summary: 2024-01-15
+### Example 1: Single commit
 
-**Period:** 08:00 - 18:00
-**Total Commits:** 5 across 2 repositories
+```
+📋 Daily Commit Summary - March 21, 2026 (Saturday)
 
-## Summary
-Implemented user authentication and fixed cart bugs.
+Tasks
+- update gitignore and mock data
 
-## Project: portal-api
-**Commits:** 3
-
-### Features
-- Implemented OAuth2 login flow (AUTH-123)
-- Added password reset endpoint
-
-### Bug Fixes
-- Fixed null pointer in user validation (#456)
-
-## Project: portal-frontend
-**Commits:** 2
-
-### Features
-- Added login page component
-
-### Documentation
-- Updated API integration docs
+---
+Total: 1 commit across 5 repositories
 ```
 
-## Commit Categorization
+### Example 2: Multiple commits
 
-Commits are automatically categorized based on Conventional Commits prefixes:
+```
+📋 Daily Commit Summary - March 21, 2026 (Saturday)
 
-| Prefix | Category |
-|--------|----------|
-| `feat:`, `feature:` | Features |
-| `fix:`, `bugfix:` | Bug Fixes |
-| `refactor:` | Refactoring |
-| `docs:`, `documentation:` | Documentation |
-| `test:`, `tests:` | Testing |
-| `chore:` | Chores |
-| `style:` | Style |
-| `perf:` | Performance |
-| (other) | Other |
+Tasks
+- add notification preview component
+- implement user preference settings
+- resolve shadow issue in notification preview
+- update gitignore and mock data
+- add API endpoint for notification settings
+- clean up legacy gateway configuration
 
-## Ticket Reference Extraction
+---
+Total: 6 commits across 5 repositories
+```
 
-Kiro extracts ticket references from commit messages:
+### Example 3: With repository grouping (optional)
 
-- **Jira-style:** `PROJ-123`, `ABC-456`
-- **GitHub issues:** `#123`, `#456`
-- **Bracketed:** `[TICKET]`, `[WIP]`
+```
+📋 Daily Commit Summary - March 21, 2026 (Saturday)
+
+Tasks
+
+backoffice-portal-next:
+- add notification preview component
+- implement user preference settings
+- resolve shadow issue in notification preview
+- update gitignore and mock data
+
+portal-backend:
+- add API endpoint for notification settings
+- clean up legacy gateway configuration
+
+---
+Total: 6 commits across 5 repositories
+```
+
+## Task Extraction Rules
+
+Kiro extracts the task description from commit messages by:
+
+1. Removing the conventional commit prefix (feat:, fix:, chore:, etc.)
+2. Removing ticket references (PROJ-123, #456)
+3. Keeping the clean task description
+
+| Commit Message | Extracted Task |
+|----------------|----------------|
+| `feat: add login page` | add login page |
+| `fix(auth): resolve token issue #123` | resolve token issue |
+| `chore: update gitignore and mock data` | update gitignore and mock data |
+| `PORTAL-456 implement user settings` | implement user settings |
 
 ## Workflow Example
 
@@ -114,18 +119,13 @@ User: "/daily-commit-summary" (or "What did I do today?")
 
 1. Kiro reads `~/.daily-commit-summary.yaml` config
 2. Scans ALL configured repos for today's commits
-3. Analyzes and categorizes the commits
-4. Displays a formatted summary
-5. Offers to save to file if needed
-
-User: "Summarize my commits for the standup"
-
-1. Kiro scans commits from work start time to now
-2. Groups by project and category
-3. Formats output for easy copy/paste to standup notes
+3. Extracts task descriptions from commit messages
+4. Displays a simple task list
+5. Shows total commit count
 
 ## Tips
 
 - Ask at end of workday to capture all commits
+- Use clear commit messages for better task descriptions
 - Provide multiple repo paths if you work across projects
 - Ask Kiro to save the summary to a file if needed
