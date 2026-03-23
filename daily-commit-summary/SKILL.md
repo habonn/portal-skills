@@ -34,6 +34,22 @@ author: "your.email@example.com"
 
 **STEP 1: Collect commits** → Run git log commands for each repository
 
+### ⚠️ IMPORTANT: Git Command Format
+
+**NEVER use `cd` to change directory before running git commands.**
+
+❌ WRONG (wastes tokens, often fails):
+```bash
+cd "/path/to/repo" && git log --author="email" ...
+```
+
+✅ CORRECT (use git -C flag):
+```bash
+git -C /absolute/path/to/repo log --author="email" --since="YYYY-MM-DD 08:00" --until="YYYY-MM-DD 23:59" --pretty=format:"%h %s" 2>/dev/null || echo "REPO_NOT_FOUND"
+```
+
+**Always use `git -C <path>` to specify the repository path directly.**
+
 **STEP 2: TRANSFORM commits to tasks** → This is MANDATORY, not optional!
 - Take each commit message
 - Rewrite it as a human-readable task sentence
