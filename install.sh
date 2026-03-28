@@ -96,10 +96,131 @@ EOF
 EOF
       echo "  ✓ Hook installed: test-ts"
       ;;
+    "code-review")
+      cat > .kiro/hooks/code-review.kiro.hook << 'EOF'
+{
+  "name": "Code Review",
+  "version": "1.0.0",
+  "description": "Perform automated code review on GitLab merge requests",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Help me review a GitLab merge request. Ask for the MR URL, then use the gitlab-code-review MCP tools to fetch the MR info and diff. Analyze the code for: security vulnerabilities, bugs, performance issues, error handling, code style, and duplication. Generate a structured report with severity levels (critical, warning, suggestion, positive) and actionable recommendations."
+  }
+}
+EOF
+      echo "  ✓ Hook installed: code-review"
+      ;;
     *)
       echo "  ⚠️  No hook defined for: $skill"
       ;;
   esac
+}
+
+# Function to setup MCP server for code-review skill
+setup_code_review_mcp() {
+  local skill_path="$1"
+  local mcp_server_path="${skill_path}/mcp-server"
+  
+  # Check if MCP server exists
+  if [ ! -d "$mcp_server_path" ]; then
+    echo "  ⚠️  MCP server not found at: $mcp_server_path"
+    return 1
+  fi
+  
+  echo ""
+  echo "📦 Setting up GitLab Code Review MCP Server..."
+  echo ""
+  
+  # Ask for GitLab configuration
+  read -p "  Enter your GitLab host (e.g., gitlab.com): " gitlab_host
+  gitlab_host=${gitlab_host:-gitlab.com}
+  
+  read -p "  Enter your GitLab personal access token (glpat-xxx): " gitlab_token
+  
+  if [ -z "$gitlab_token" ]; then
+    echo "  ⚠️  No token provided. You can configure it later in ~/.kiro/settings/mcp.json"
+    return 0
+  fi
+  
+  # Build MCP server
+  echo ""
+  echo "  Building MCP server..."
+  (cd "$mcp_server_path" && npm install --silent && npm run build --silent) || {
+    echo "  ⚠️  Failed to build MCP server. Please run manually:"
+    echo "      cd $mcp_server_path && npm install && npm run build"
+    return 1
+  }
+  
+  # Get absolute path
+  local abs_mcp_path
+  abs_mcp_path=$(cd "$mcp_server_path" && pwd)
+  
+  # Create MCP config
+  local mcp_config_dir="$HOME/.kiro/settings"
+  local mcp_config_file="$mcp_config_dir/mcp.json"
+  
+  mkdir -p "$mcp_config_dir"
+  
+  # Check if mcp.json exists and merge config
+  if [ -f "$mcp_config_file" ]; then
+    # Backup existing config
+    cp "$mcp_config_file" "${mcp_config_file}.backup"
+    
+    # Use node to merge JSON (more reliable than jq)
+    node -e "
+      const fs = require('fs');
+      const existing = JSON.parse(fs.readFileSync('$mcp_config_file', 'utf8'));
+      existing.mcpServers = existing.mcpServers || {};
+      existing.mcpServers['gitlab-code-review'] = {
+        command: 'node',
+        args: ['$abs_mcp_path/dist/index.js'],
+        env: {
+          GITLAB_TOKEN: '$gitlab_token',
+          GITLAB_HOST: '$gitlab_host'
+        }
+      };
+      fs.writeFileSync('$mcp_config_file', JSON.stringify(existing, null, 2));
+    " 2>/dev/null || {
+      # Fallback: create new config
+      cat > "$mcp_config_file" << MCPEOF
+{
+  "mcpServers": {
+    "gitlab-code-review": {
+      "command": "node",
+      "args": ["$abs_mcp_path/dist/index.js"],
+      "env": {
+        "GITLAB_TOKEN": "$gitlab_token",
+        "GITLAB_HOST": "$gitlab_host"
+      }
+    }
+  }
+}
+MCPEOF
+    }
+  else
+    # Create new config
+    cat > "$mcp_config_file" << MCPEOF
+{
+  "mcpServers": {
+    "gitlab-code-review": {
+      "command": "node",
+      "args": ["$abs_mcp_path/dist/index.js"],
+      "env": {
+        "GITLAB_TOKEN": "$gitlab_token",
+        "GITLAB_HOST": "$gitlab_host"
+      }
+    }
+  }
+}
+MCPEOF
+  fi
+  
+  echo "  ✓ MCP server configured at: $mcp_config_file"
+  echo "  ✓ GitLab host: $gitlab_host"
+  echo ""
 }
 
 echo "🚀 Portal Skills - Kiro Hooks Installer"
@@ -148,9 +269,26 @@ for skill in "${SELECTED_SKILLS[@]}"; do
   create_hook "$skill"
 done
 
+# Check if code-review skill is being installed and setup MCP
+for skill in "${SELECTED_SKILLS[@]}"; do
+  if [ "$skill" = "code-review" ]; then
+    # Find the skill path
+    if [ -d ".agents/skills/code-review" ]; then
+      setup_code_review_mcp ".agents/skills/code-review"
+    elif [ -d "code-review" ]; then
+      setup_code_review_mcp "code-review"
+    fi
+    break
+  fi
+done
+
 echo ""
 echo "✅ Kiro hooks installed!"
 echo ""
 echo "Usage:"
 echo "  • Chat: Ask Kiro naturally (e.g., 'commit my changes')"
 echo "  • Hooks: Agent Hooks panel → click play button"
+echo ""
+echo "For code-review skill:"
+echo "  • Say: '/code-review https://gitlab.com/group/project/-/merge_requests/123'"
+echo "  • Or: 'review this MR: <url>'"
