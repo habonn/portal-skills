@@ -155,7 +155,9 @@ setup_code_review_mcp() {
   read gitlab_token < /dev/tty
   
   if [ -z "$gitlab_token" ]; then
-    echo "  ⚠️  No token provide
+    echo "  ⚠️  No token provided. You can configure it later in ~/.kiro/settings/mcp.json"
+    return 0
+  fi
   
   # Build MCP server
   echo ""
