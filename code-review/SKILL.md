@@ -1,11 +1,21 @@
 ---
 name: code-review
-description: Perform automated code reviews on GitLab merge requests. Analyzes code for style, bugs, security, performance, and error handling issues.
+description: Perform automated code reviews on GitLab merge requests. Analyzes code for style, bugs, security, performance, and error handling issues. Generates HTML report for easy reading.
 ---
 
 # Code Review Skill
 
-Perform automated code reviews on GitLab merge requests with multi-category analysis and structured summary reports.
+Perform automated code reviews on GitLab merge requests with multi-category analysis and structured summary reports. **Automatically generates an HTML report** with professional styling for easy reading and sharing.
+
+## Output
+
+After completing the review, the skill automatically saves an HTML report:
+- **Filename:** `code-review-{MR-number}.html` in the current directory
+- **Features:**
+  - Color-coded severity levels (🔴 critical, 🟡 warning, 🔵 suggestion, 🟢 positive)
+  - Syntax-highlighted code snippets
+  - Summary statistics at the top
+  - Responsive design for easy reading on any device
 
 ## Prerequisites
 

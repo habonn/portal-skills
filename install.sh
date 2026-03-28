@@ -101,13 +101,13 @@ EOF
 {
   "name": "Code Review",
   "version": "1.0.0",
-  "description": "Perform automated code review on GitLab merge requests",
+  "description": "Perform automated code review on GitLab merge requests with HTML report",
   "when": {
     "type": "userTriggered"
   },
   "then": {
     "type": "askAgent",
-    "prompt": "Help me review a GitLab merge request. Ask for the MR URL, then use the gitlab-code-review MCP tools to fetch the MR info and diff. Analyze the code for: security vulnerabilities, bugs, performance issues, error handling, code style, and duplication. Generate a structured report with severity levels (critical, warning, suggestion, positive) and actionable recommendations."
+    "prompt": "Review a GitLab merge request.\n\nSTEPS:\n1. Ask for the MR URL\n2. Use gitlab-code-review MCP tools to fetch MR info and diff\n3. Analyze code for: security, bugs, performance, error handling, style, duplication\n4. Generate report with severity levels: critical (red), warning (orange), suggestion (blue), positive (green)\n\nOUTPUT:\n- Show findings in chat\n- Save HTML report as 'code-review-{MR-number}.html'\n- Use template from .agents/skills/code-review/templates/report.html as reference for styling\n- Include: summary stats, color-coded findings, code snippets, action items\n- After saving HTML, ask user: 'Would you like me to open the report in your browser?'\n- If yes, run: open code-review-{MR-number}.html"
   }
 }
 EOF
