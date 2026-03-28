@@ -134,11 +134,14 @@ setup_code_review_mcp() {
   echo "📦 Setting up GitLab Code Review MCP Server..."
   echo ""
   
+  # Read from /dev/tty to allow input when running via curl | bash
   # Ask for GitLab configuration
-  read -p "  Enter your GitLab host (e.g., gitlab.com): " gitlab_host
+  echo -n "  Enter your GitLab host (e.g., gitlab.com): "
+  read gitlab_host < /dev/tty
   gitlab_host=${gitlab_host:-gitlab.com}
   
-  read -p "  Enter your GitLab personal access token (glpat-xxx): " gitlab_token
+  echo -n "  Enter your GitLab personal access token (glpat-xxx): "
+  read gitlab_token < /dev/tty
   
   if [ -z "$gitlab_token" ]; then
     echo "  ⚠️  No token provided. You can configure it later in ~/.kiro/settings/mcp.json"

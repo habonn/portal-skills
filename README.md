@@ -31,6 +31,7 @@ curl -fsSL https://raw.githubusercontent.com/habonn/portal-skills/main/install.s
 | Skill | Description | Command |
 |-------|-------------|---------|
 | [commit](./commit/SKILL.md) | Smart git commits with Conventional Commits format | `/commit` or "commit my changes" |
+| [code-review](./code-review/SKILL.md) | Automated code review for GitLab merge requests | `/code-review <MR-URL>` |
 | [e2e](./e2e/SKILL.md) | Generate Playwright E2E tests using Page Object Model | `/e2e create <module>` |
 | [test-go](./test-go/SKILL.md) | Generate Go unit tests with 80%+ coverage | `/test-go create <file>` |
 | [test-ts](./test-ts/SKILL.md) | Generate TypeScript/Vitest tests with 80%+ coverage | `/test-ts create <file>` |
@@ -59,16 +60,46 @@ Reference files directly in commands:
 .kiro/
 ├── skills/
 │   ├── commit/SKILL.md
+│   ├── code-review/
+│   │   ├── SKILL.md
+│   │   └── mcp-server/        # GitLab MCP server
 │   ├── e2e/SKILL.md
 │   ├── test-go/SKILL.md
 │   ├── test-ts/SKILL.md
 │   └── daily-commit-summary/SKILL.md
 └── hooks/
     ├── commit.kiro.hook
+    ├── code-review.kiro.hook
     ├── e2e.kiro.hook
     ├── test-go.kiro.hook
     ├── test-ts.kiro.hook
     └── daily-commit-summary.kiro.hook
+
+~/.kiro/settings/mcp.json      # GitLab MCP server config (for code-review)
+```
+
+## Code Review Skill Setup
+
+The `code-review` skill requires a GitLab personal access token. When you run `install.sh`, it will:
+
+1. Prompt for your GitLab host (default: `gitlab.com`)
+2. Prompt for your GitLab personal access token (`glpat-xxx`)
+3. Build and configure the MCP server automatically
+
+### Creating a GitLab Token
+
+1. Go to GitLab → Settings → Access Tokens
+2. Create a token with `read_api` scope
+3. Copy the token (starts with `glpat-`)
+
+### Usage
+
+```bash
+# In Kiro chat
+/code-review https://gitlab.com/group/project/-/merge_requests/123
+
+# Or natural language
+review this MR: https://gitlab.com/group/project/-/merge_requests/123
 ```
 
 ## Manual Installation
