@@ -123,11 +123,22 @@ EOF
 setup_code_review_mcp() {
   local skill_path="$1"
   local mcp_server_path="${skill_path}/mcp-server"
+  local mcp_config_file="$HOME/.kiro/settings/mcp.json"
   
   # Check if MCP server exists
   if [ ! -d "$mcp_server_path" ]; then
     echo "  ⚠️  MCP server not found at: $mcp_server_path"
     return 1
+  fi
+  
+  # Check if gitlab-code-review is already configured
+  if [ -f "$mcp_config_file" ]; then
+    if grep -q "gitlab-code-review" "$mcp_config_file" 2>/dev/null; then
+      echo ""
+      echo "  ✓ GitLab MCP server already configured in $mcp_config_file"
+      echo "  Skipping setup (to reconfigure, edit ~/.kiro/settings/mcp.json)"
+      return 0
+    fi
   fi
   
   echo ""
@@ -144,9 +155,7 @@ setup_code_review_mcp() {
   read gitlab_token < /dev/tty
   
   if [ -z "$gitlab_token" ]; then
-    echo "  ⚠️  No token provided. You can configure it later in ~/.kiro/settings/mcp.json"
-    return 0
-  fi
+    echo "  ⚠️  No token provide
   
   # Build MCP server
   echo ""
