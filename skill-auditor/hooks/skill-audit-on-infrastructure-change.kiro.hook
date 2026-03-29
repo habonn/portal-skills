@@ -1,0 +1,13 @@
+{
+  "name": "Skill Audit on Infrastructure Change",
+  "version": "1.0.0",
+  "description": "Automatically prompt to update skill.md when infrastructure files are modified",
+  "when": {
+    "type": "fileEdited",
+    "patterns": ["Dockerfile", "docker-compose.yml", "*.tf", "*.yaml", ".gitlab-ci.yml", ".github/workflows/*.yml", "Jenkinsfile", "k8s/*.yaml", "cloudformation/*.yaml"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Infrastructure configuration has changed. Run /skill-audit to update the skill file with the new deployment or infrastructure information."
+  }
+}

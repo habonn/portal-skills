@@ -32,10 +32,32 @@ curl -fsSL https://raw.githubusercontent.com/habonn/portal-skills/main/install.s
 |-------|-------------|---------|
 | [commit](./commit/SKILL.md) | Smart git commits with Conventional Commits format | `/commit` or "commit my changes" |
 | [code-review](./code-review/SKILL.md) | Automated code review for GitLab merge requests | `/code-review <MR-URL>` |
+| [skill-auditor](./skill-auditor/SKILL.md) | 🔥 Auto-generate custom skill.md by analyzing repo structure | `/skill-audit` or "audit my repo" |
 | [e2e](./e2e/SKILL.md) | Generate Playwright E2E tests using Page Object Model | `/e2e create <module>` |
 | [test-go](./test-go/SKILL.md) | Generate Go unit tests with 80%+ coverage | `/test-go create <file>` |
 | [test-ts](./test-ts/SKILL.md) | Generate TypeScript/Vitest tests with 80%+ coverage | `/test-ts create <file>` |
 | [daily-commit-summary](./daily-commit-summary/SKILL.md) | Generate daily task summaries from commits | `/daily-commit-summary` |
+
+### 🌟 Featured: Skill Auditor
+
+The **skill-auditor** analyzes your repository and generates a customized skill file for your project.
+
+**Why use it:**
+- AI understands YOUR project (not generic patterns)
+- Auto-detects tech stack, architecture, conventions
+- Works across multiple repos with different stacks
+
+**Install:**
+```bash
+npx skills add habonn/portal-skills@skill-auditor
+```
+
+**Use in Kiro:**
+```
+/skill-audit
+```
+
+See [skill-auditor/README.md](./skill-auditor/README.md) for details.
 
 ## Usage
 
@@ -63,6 +85,9 @@ Reference files directly in commands:
 │   ├── code-review/
 │   │   ├── SKILL.md
 │   │   └── mcp-server/        # GitLab MCP server
+│   ├── skill-auditor/
+│   │   ├── SKILL.md
+│   │   └── auditor-agent.ts   # Standalone auditor script
 │   ├── e2e/SKILL.md
 │   ├── test-go/SKILL.md
 │   ├── test-ts/SKILL.md
@@ -70,6 +95,10 @@ Reference files directly in commands:
 └── hooks/
     ├── commit.kiro.hook
     ├── code-review.kiro.hook
+    ├── skill-audit-manual.kiro.hook
+    ├── skill-audit-on-dependency-change.kiro.hook
+    ├── skill-audit-on-config-change.kiro.hook
+    ├── skill-audit-on-infrastructure-change.kiro.hook
     ├── e2e.kiro.hook
     ├── test-go.kiro.hook
     ├── test-ts.kiro.hook

@@ -113,6 +113,68 @@ EOF
 EOF
       echo "  ✓ Hook installed: code-review"
       ;;
+    "skill-auditor")
+      cat > .kiro/hooks/skill-audit-manual.kiro.hook << 'EOF'
+{
+  "name": "Manual Skill Audit",
+  "version": "1.0.0",
+  "description": "Manually trigger a full repository audit to generate or update the skill.md file",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Perform a comprehensive repository audit. Run /skill-audit to analyze the project structure, dependencies, architecture patterns, and generate an updated skill.md file."
+  }
+}
+EOF
+      cat > .kiro/hooks/skill-audit-on-dependency-change.kiro.hook << 'EOF'
+{
+  "name": "Skill Audit on Dependency Change",
+  "version": "1.0.0",
+  "description": "Automatically prompt to update skill.md when dependency files are modified",
+  "when": {
+    "type": "fileEdited",
+    "patterns": ["package.json", "go.mod", "requirements.txt", "Cargo.toml", "pom.xml", "build.gradle", "pnpm-lock.yaml", "yarn.lock", "go.sum", "Pipfile", "Pipfile.lock", "pyproject.toml"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Dependencies have been updated. Analyze the changes and run /skill-audit to update the repository's skill file with the new dependency information."
+  }
+}
+EOF
+      cat > .kiro/hooks/skill-audit-on-config-change.kiro.hook << 'EOF'
+{
+  "name": "Skill Audit on Config Change",
+  "version": "1.0.0",
+  "description": "Automatically prompt to update skill.md when code configuration files are modified",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [".eslintrc.*", ".prettierrc.*", "tsconfig.json", ".golangci.yml", "pyproject.toml", "vitest.config.*", "jest.config.*", "pytest.ini"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Code configuration has been updated. Run /skill-audit to update the skill file with the new code conventions and standards."
+  }
+}
+EOF
+      cat > .kiro/hooks/skill-audit-on-infrastructure-change.kiro.hook << 'EOF'
+{
+  "name": "Skill Audit on Infrastructure Change",
+  "version": "1.0.0",
+  "description": "Automatically prompt to update skill.md when infrastructure files are modified",
+  "when": {
+    "type": "fileEdited",
+    "patterns": ["Dockerfile", "docker-compose.yml", "*.tf", "*.yaml", ".gitlab-ci.yml", ".github/workflows/*.yml", "Jenkinsfile", "k8s/*.yaml", "cloudformation/*.yaml"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Infrastructure configuration has changed. Run /skill-audit to update the skill file with the new deployment or infrastructure information."
+  }
+}
+EOF
+      echo "  ✓ Hook installed: skill-auditor (4 hooks)"
+      ;;
     *)
       echo "  ⚠️  No hook defined for: $skill"
       ;;

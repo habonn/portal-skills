@@ -1,0 +1,13 @@
+{
+  "name": "Skill Audit on Config Change",
+  "version": "1.0.0",
+  "description": "Automatically prompt to update skill.md when code configuration files are modified",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [".eslintrc.*", ".prettierrc.*", "tsconfig.json", ".golangci.yml", "pyproject.toml", "vitest.config.*", "jest.config.*", "pytest.ini"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Code configuration has been updated. Run /skill-audit to update the skill file with the new code conventions and standards."
+  }
+}
