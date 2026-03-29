@@ -9,10 +9,13 @@ Analyze your repository and generate a customized SKILL.md file so AI understand
 
 ## When to Use This Skill
 
-- "audit my repo"
-- "analyze project"
-- "generate skill file"
-- "/skill-audit"
+Use this skill when the user:
+
+- Says "audit my repo" or "audit repo"
+- Says "analyze project" or "analyze my project"
+- Says "generate skill file" or "create skill file"
+- Asks "/skill-audit"
+- Wants to understand project structure
 - After major refactoring or dependency updates
 
 ---
