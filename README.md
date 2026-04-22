@@ -37,6 +37,7 @@ curl -fsSL https://raw.githubusercontent.com/habonn/portal-skills/main/install.s
 | [test-go](./test-go/SKILL.md) | Generate Go unit tests with 80%+ coverage | `/test-go create <file>` |
 | [test-ts](./test-ts/SKILL.md) | Generate TypeScript/Vitest tests with 80%+ coverage | `/test-ts create <file>` |
 | [daily-commit-summary](./daily-commit-summary/SKILL.md) | Generate daily task summaries from commits | `/daily-commit-summary` |
+| [sprint-commit-summary](./sprint-commit-summary/SKILL.md) | Generate 2-week sprint summaries with date range input | `/sprint-commit-summary 6-17` |
 
 ### 🌟 Featured: Skill Auditor
 
@@ -91,7 +92,8 @@ Reference files directly in commands:
 │   ├── e2e/SKILL.md
 │   ├── test-go/SKILL.md
 │   ├── test-ts/SKILL.md
-│   └── daily-commit-summary/SKILL.md
+│   ├── daily-commit-summary/SKILL.md
+│   └── sprint-commit-summary/SKILL.md
 └── hooks/
     ├── commit.kiro.hook
     ├── code-review.kiro.hook
@@ -102,7 +104,8 @@ Reference files directly in commands:
     ├── e2e.kiro.hook
     ├── test-go.kiro.hook
     ├── test-ts.kiro.hook
-    └── daily-commit-summary.kiro.hook
+    ├── daily-commit-summary.kiro.hook
+    └── sprint-commit-summary.kiro.hook
 
 ~/.kiro/settings/mcp.json      # GitLab MCP server config (for code-review)
 ```

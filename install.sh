@@ -96,6 +96,23 @@ EOF
 EOF
       echo "  ✓ Hook installed: test-ts"
       ;;
+    "sprint-commit-summary")
+      cat > .kiro/hooks/sprint-commit-summary.kiro.hook << 'EOF'
+{
+  "name": "Sprint Commit Summary",
+  "version": "1.0.0",
+  "description": "Generate a 2-week sprint commit summary with transformed tasks, day-by-day breakdown, and sprint statistics. Useful before Friday sprint demos.",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Generate a sprint commit summary using the sprint-commit-summary skill. Ask the user for the sprint date range (e.g., '6-17' for June 6 to June 17) if not already provided. Follow all steps in the sprint-commit-summary/SKILL.md skill file: read config from ~/.daily-commit-summary.yaml, collect commits across all repositories for the sprint period, transform them into human-readable tasks, and output the full sprint summary with Week 1/Week 2 task grouping, day-by-day breakdown, and sprint statistics."
+  }
+}
+EOF
+      echo "  ✓ Hook installed: sprint-commit-summary"
+      ;;
     "code-review")
       cat > .kiro/hooks/code-review.kiro.hook << 'EOF'
 {
