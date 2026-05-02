@@ -1,9 +1,14 @@
 ---
-name: commit
-description: Smart git commit workflow using Conventional Commits format with AI-generated commit message suggestions based on staged changes.
+name: commit-msg
+description: |
+  Smart git commit workflow using Conventional Commits format with
+  AI-generated commit message suggestions based on staged changes.
+  USE FOR: writing commit messages, staging changes, conventional commits,
+  atomic commits, breaking changes.
+  DO NOT USE FOR: git branching, merging, rebasing, CI/CD pipelines.
 ---
 
-# Commit Skill
+# Commit Message Skill
 
 Generate meaningful, well-structured git commits following Conventional Commits specification.
 
@@ -94,10 +99,10 @@ git add -A
 
 Analyze the staged changes and generate an appropriate commit message:
 
-1. **Identify the primary change type** - Is it a feature, fix, refactor, etc.?
-2. **Determine the scope** - What component/area is affected?
-3. **Write a concise description** - What does this change do? (imperative mood)
-4. **Add body if needed** - For complex changes, explain the "why"
+1. **Identify the primary change type** — Is it a feature, fix, refactor, etc.?
+2. **Determine the scope** — What component/area is affected?
+3. **Write a concise description** — What does this change do? (imperative mood)
+4. **Add body if needed** — For complex changes, explain the "why"
 
 ### Step 5: Execute Commit
 
@@ -156,7 +161,7 @@ For breaking changes, add `!` after the type/scope and include `BREAKING CHANGE:
 ```
 feat(api)!: change authentication endpoint response format
 
-BREAKING CHANGE: The /auth/login endpoint now returns { token, user } 
+BREAKING CHANGE: The /auth/login endpoint now returns { token, user }
 instead of just the token string.
 ```
 
@@ -189,8 +194,8 @@ User: "commit my changes"
 
 ## Tips
 
-- **One logical change per commit** - Makes history easier to navigate
-- **Present tense, imperative mood** - "add" not "adds" or "added"
+- **One logical change per commit** — Makes history easier to navigate
+- **Present tense, imperative mood** — "add" not "adds" or "added"
 - **No period at the end** of the subject line
 - **Capitalize the first letter** of the description
 - **Reference issues** in the footer when applicable: `Closes #123`

@@ -1,6 +1,12 @@
 ---
 name: daily-commit-summary
-description: Generate daily task summaries by analyzing git commits. MUST include analyzed Tasks section.
+description: |
+  Generate daily task summaries by analyzing git commits. MUST include
+  analyzed Tasks section.
+  USE FOR: daily standups, end-of-day summaries, commit analysis,
+  task transformation from raw commits.
+  DO NOT USE FOR: sprint summaries (use sprint-commit-summary), writing
+  commits (use commit-msg).
 ---
 
 # Daily Commit Summary Skill
@@ -144,7 +150,7 @@ Total: 3 commits today 🎉
 
 Parse commits using Conventional Commits format: `<type>(<scope>): <description>`
 
-Reference: #[[file:commit/SKILL.md]]
+Reference: #[[file:commit-msg/SKILL.md]]
 
 For EACH commit, you MUST transform it like this:
 
@@ -187,7 +193,7 @@ fix(auth): resolve token issue
 
 ## Commit Type → Task Language
 
-Reference: Uses Conventional Commits format from #[[file:commit/SKILL.md]]
+Reference: Uses Conventional Commits format from #[[file:commit-msg/SKILL.md]]
 
 | Type       | Description                                          | Task Action Words                    |
 | ---------- | ---------------------------------------------------- | ------------------------------------ |

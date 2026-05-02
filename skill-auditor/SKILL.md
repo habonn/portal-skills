@@ -1,6 +1,11 @@
 ---
 name: skill-auditor
-description: Analyze repository and generate custom SKILL.md with project-specific tech stack, architecture, and conventions.
+description: |
+  Analyze repository and generate custom SKILL.md with project-specific
+  tech stack, architecture, and conventions.
+  USE FOR: auditing repos, generating skill files, detecting architecture
+  patterns, understanding project structure after major refactors.
+  DO NOT USE FOR: writing application code, running tests, deploying.
 ---
 
 # Skill Auditor

@@ -1,18 +1,136 @@
 #!/bin/bash
 
-# Portal Skills - Kiro Hooks Installer
+# Skills for Real Engineers — Kiro Hooks Installer
 # Installs Kiro hooks for skills already installed via `npx skills add`
 
 set -e
 
-# Function to create hook for a skill
 create_hook() {
   local skill=$1
   mkdir -p .kiro/hooks
-  
+
   case $skill in
-    "commit")
-      cat > .kiro/hooks/commit.kiro.hook << 'EOF'
+    "grill-me")
+      cat > .kiro/hooks/grill-me.kiro.hook << 'EOF'
+{
+  "name": "Grill Me",
+  "version": "1.0.0",
+  "description": "Get relentlessly interviewed about a plan or design until every decision is resolved",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer. Ask the questions one at a time. If a question can be answered by exploring the codebase, explore the codebase instead."
+  }
+}
+EOF
+      echo "  ✓ Hook installed: grill-me"
+      ;;
+    "grill-with-docs")
+      cat > .kiro/hooks/grill-with-docs.kiro.hook << 'EOF'
+{
+  "name": "Grill With Docs",
+  "version": "1.0.0",
+  "description": "Grilling session that updates CONTEXT.md and ADRs as decisions crystallize",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies one-by-one. For each question, provide your recommended answer. Ask one at a time. Challenge against the glossary in CONTEXT.md. Sharpen fuzzy language. Cross-reference with code. Update CONTEXT.md inline when terms are resolved. Offer ADRs sparingly — only when hard to reverse, surprising without context, and the result of a real trade-off."
+  }
+}
+EOF
+      echo "  ✓ Hook installed: grill-with-docs"
+      ;;
+    "caveman")
+      cat > .kiro/hooks/caveman.kiro.hook << 'EOF'
+{
+  "name": "Caveman Mode",
+  "version": "1.0.0",
+  "description": "Ultra-compressed communication — cuts token usage ~75%",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Activate caveman mode. Respond terse like smart caveman. Drop articles, filler, pleasantries, hedging. Fragments OK. Short synonyms. Abbreviate common terms (DB/auth/config/req/res/fn/impl). Use arrows for causality. Technical terms stay exact. Code blocks unchanged. Stay active every response until user says 'stop caveman' or 'normal mode'. Exception: drop caveman temporarily for security warnings and irreversible action confirmations."
+  }
+}
+EOF
+      echo "  ✓ Hook installed: caveman"
+      ;;
+    "tdd")
+      cat > .kiro/hooks/tdd.kiro.hook << 'EOF'
+{
+  "name": "TDD",
+  "version": "1.0.0",
+  "description": "Test-driven development with red-green-refactor loop",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Help me build this feature using TDD. Follow the red-green-refactor loop with vertical slices — one test at a time, not all tests first. Before writing code: confirm what interface changes are needed, which behaviors to test, and get my approval. Then: write ONE failing test (RED), write minimal code to pass (GREEN), repeat. After all tests pass, look for refactor candidates. Tests should verify behavior through public interfaces, not implementation details."
+  }
+}
+EOF
+      echo "  ✓ Hook installed: tdd"
+      ;;
+    "diagnose")
+      cat > .kiro/hooks/diagnose.kiro.hook << 'EOF'
+{
+  "name": "Diagnose",
+  "version": "1.0.0",
+  "description": "Disciplined diagnosis loop for hard bugs and performance regressions",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Help me diagnose this bug using a disciplined loop. Phase 1: Build a feedback loop (failing test, curl script, headless browser, etc.) — spend disproportionate effort here. Phase 2: Reproduce the bug. Phase 3: Generate 3-5 ranked hypotheses before testing any. Phase 4: Instrument — one variable at a time, tag debug logs with [DEBUG-xxxx]. Phase 5: Fix + regression test. Phase 6: Cleanup — remove debug instrumentation, state the root cause in the commit message."
+  }
+}
+EOF
+      echo "  ✓ Hook installed: diagnose"
+      ;;
+    "improve-codebase-architecture")
+      cat > .kiro/hooks/improve-codebase-architecture.kiro.hook << 'EOF'
+{
+  "name": "Improve Codebase Architecture",
+  "version": "1.0.0",
+  "description": "Find deepening opportunities — turn shallow modules into deep ones",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Explore this codebase and surface architectural friction. Look for shallow modules (interface nearly as complex as implementation), tightly-coupled modules leaking across seams, and untested code. Apply the deletion test: would deleting a module concentrate complexity or just move it? Present a numbered list of deepening opportunities with files, problem, solution, and benefits. Use CONTEXT.md vocabulary if available. Ask me which candidate to explore before proposing interfaces."
+  }
+}
+EOF
+      echo "  ✓ Hook installed: improve-codebase-architecture"
+      ;;
+    "zoom-out")
+      cat > .kiro/hooks/zoom-out.kiro.hook << 'EOF'
+{
+  "name": "Zoom Out",
+  "version": "1.0.0",
+  "description": "Get a high-level map of modules and callers in unfamiliar code",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "I don't know this area of code well. Go up a layer of abstraction. Give me a map of all the relevant modules and callers, using the project's domain glossary vocabulary if CONTEXT.md exists."
+  }
+}
+EOF
+      echo "  ✓ Hook installed: zoom-out"
+      ;;
+    "commit-msg")
+      cat > .kiro/hooks/commit-msg.kiro.hook << 'EOF'
 {
   "name": "Smart Commit",
   "version": "1.0.0",
@@ -26,7 +144,7 @@ create_hook() {
   }
 }
 EOF
-      echo "  ✓ Hook installed: commit"
+      echo "  ✓ Hook installed: commit-msg"
       ;;
     "daily-commit-summary")
       cat > .kiro/hooks/daily-commit-summary.kiro.hook << 'EOF'
@@ -45,63 +163,12 @@ EOF
 EOF
       echo "  ✓ Hook installed: daily-commit-summary"
       ;;
-    "e2e")
-      cat > .kiro/hooks/e2e.kiro.hook << 'EOF'
-{
-  "name": "E2E Test Generator",
-  "version": "1.0.0",
-  "description": "Create or update Playwright E2E tests for a module",
-  "when": {
-    "type": "userTriggered"
-  },
-  "then": {
-    "type": "askAgent",
-    "prompt": "Help me create or update E2E tests. First, ask which module I want to test. Then read existing e2e/pages/ files to understand the project's Page Object Model patterns. Create page objects and spec files following the same conventions."
-  }
-}
-EOF
-      echo "  ✓ Hook installed: e2e"
-      ;;
-    "test-go")
-      cat > .kiro/hooks/test-go.kiro.hook << 'EOF'
-{
-  "name": "Go Test Generator",
-  "version": "1.0.0",
-  "description": "Generate Go unit tests with 80%+ coverage",
-  "when": {
-    "type": "userTriggered"
-  },
-  "then": {
-    "type": "askAgent",
-    "prompt": "Help me create or update Go unit tests. Ask which file or folder I want to test. Analyze the source code to identify all functions, branches, and error paths. Generate table-driven tests that cover all execution paths for 80%+ coverage."
-  }
-}
-EOF
-      echo "  ✓ Hook installed: test-go"
-      ;;
-    "test-ts")
-      cat > .kiro/hooks/test-ts.kiro.hook << 'EOF'
-{
-  "name": "TypeScript Test Generator",
-  "version": "1.0.0",
-  "description": "Generate TypeScript/Vitest unit tests with 80%+ coverage",
-  "when": {
-    "type": "userTriggered"
-  },
-  "then": {
-    "type": "askAgent",
-    "prompt": "Help me create or update TypeScript unit tests using Vitest. Ask which file or folder I want to test. Analyze the source code to identify all functions, branches, and async paths. Generate tests that cover all execution paths for 80%+ coverage."
-  }
-}
-EOF
-      echo "  ✓ Hook installed: test-ts"
-      ;;
     "sprint-commit-summary")
       cat > .kiro/hooks/sprint-commit-summary.kiro.hook << 'EOF'
 {
   "name": "Sprint Commit Summary",
   "version": "1.0.0",
-  "description": "Generate a 2-week sprint commit summary with transformed tasks, day-by-day breakdown, and sprint statistics. Useful before Friday sprint demos.",
+  "description": "Generate a 2-week sprint commit summary with transformed tasks, day-by-day breakdown, and sprint statistics",
   "when": {
     "type": "userTriggered"
   },
@@ -112,23 +179,6 @@ EOF
 }
 EOF
       echo "  ✓ Hook installed: sprint-commit-summary"
-      ;;
-    "code-review")
-      cat > .kiro/hooks/code-review.kiro.hook << 'EOF'
-{
-  "name": "Code Review",
-  "version": "1.0.0",
-  "description": "Perform automated code review on GitLab merge requests with HTML report",
-  "when": {
-    "type": "userTriggered"
-  },
-  "then": {
-    "type": "askAgent",
-    "prompt": "Review a GitLab merge request.\n\nSTEPS:\n1. Ask for the MR URL\n2. Use gitlab-code-review MCP tools to fetch MR info and diff\n3. Analyze code for: security, bugs, performance, error handling, style, duplication\n4. Generate report with severity levels: critical (red), warning (orange), suggestion (blue), positive (green)\n\nOUTPUT:\n- Show findings in chat\n- Save HTML report as 'code-review-{MR-number}.html'\n- Use template from .agents/skills/code-review/templates/report.html as reference for styling\n- Include: summary stats, color-coded findings, code snippets, action items\n- After saving HTML, ask user: 'Would you like me to open the report in your browser?'\n- If yes, run: open code-review-{MR-number}.html"
-  }
-}
-EOF
-      echo "  ✓ Hook installed: code-review"
       ;;
     "skill-auditor")
       cat > .kiro/hooks/skill-auditor.kiro.hook << 'EOF'
@@ -153,125 +203,7 @@ EOF
   esac
 }
 
-# Function to setup MCP server for code-review skill
-setup_code_review_mcp() {
-  local skill_path="$1"
-  local mcp_server_path="${skill_path}/mcp-server"
-  local mcp_config_file="$HOME/.kiro/settings/mcp.json"
-  
-  # Check if MCP server exists
-  if [ ! -d "$mcp_server_path" ]; then
-    echo "  ⚠️  MCP server not found at: $mcp_server_path"
-    return 1
-  fi
-  
-  # Check if gitlab-code-review is already configured
-  if [ -f "$mcp_config_file" ]; then
-    if grep -q "gitlab-code-review" "$mcp_config_file" 2>/dev/null; then
-      echo ""
-      echo "  ✓ GitLab MCP server already configured in $mcp_config_file"
-      echo "  Skipping setup (to reconfigure, edit ~/.kiro/settings/mcp.json)"
-      return 0
-    fi
-  fi
-  
-  echo ""
-  echo "📦 Setting up GitLab Code Review MCP Server..."
-  echo ""
-  
-  # Read from /dev/tty to allow input when running via curl | bash
-  # Ask for GitLab configuration
-  echo -n "  Enter your GitLab host (e.g., gitlab.com): "
-  read gitlab_host < /dev/tty
-  gitlab_host=${gitlab_host:-gitlab.com}
-  
-  echo -n "  Enter your GitLab personal access token (glpat-xxx): "
-  read gitlab_token < /dev/tty
-  
-  if [ -z "$gitlab_token" ]; then
-    echo "  ⚠️  No token provided. You can configure it later in ~/.kiro/settings/mcp.json"
-    return 0
-  fi
-  
-  # Build MCP server
-  echo ""
-  echo "  Building MCP server..."
-  (cd "$mcp_server_path" && npm install --silent && npm run build --silent) || {
-    echo "  ⚠️  Failed to build MCP server. Please run manually:"
-    echo "      cd $mcp_server_path && npm install && npm run build"
-    return 1
-  }
-  
-  # Get absolute path
-  local abs_mcp_path
-  abs_mcp_path=$(cd "$mcp_server_path" && pwd)
-  
-  # Create MCP config
-  local mcp_config_dir="$HOME/.kiro/settings"
-  local mcp_config_file="$mcp_config_dir/mcp.json"
-  
-  mkdir -p "$mcp_config_dir"
-  
-  # Check if mcp.json exists and merge config
-  if [ -f "$mcp_config_file" ]; then
-    # Backup existing config
-    cp "$mcp_config_file" "${mcp_config_file}.backup"
-    
-    # Use node to merge JSON (more reliable than jq)
-    node -e "
-      const fs = require('fs');
-      const existing = JSON.parse(fs.readFileSync('$mcp_config_file', 'utf8'));
-      existing.mcpServers = existing.mcpServers || {};
-      existing.mcpServers['gitlab-code-review'] = {
-        command: 'node',
-        args: ['$abs_mcp_path/dist/index.js'],
-        env: {
-          GITLAB_TOKEN: '$gitlab_token',
-          GITLAB_HOST: '$gitlab_host'
-        }
-      };
-      fs.writeFileSync('$mcp_config_file', JSON.stringify(existing, null, 2));
-    " 2>/dev/null || {
-      # Fallback: create new config
-      cat > "$mcp_config_file" << MCPEOF
-{
-  "mcpServers": {
-    "gitlab-code-review": {
-      "command": "node",
-      "args": ["$abs_mcp_path/dist/index.js"],
-      "env": {
-        "GITLAB_TOKEN": "$gitlab_token",
-        "GITLAB_HOST": "$gitlab_host"
-      }
-    }
-  }
-}
-MCPEOF
-    }
-  else
-    # Create new config
-    cat > "$mcp_config_file" << MCPEOF
-{
-  "mcpServers": {
-    "gitlab-code-review": {
-      "command": "node",
-      "args": ["$abs_mcp_path/dist/index.js"],
-      "env": {
-        "GITLAB_TOKEN": "$gitlab_token",
-        "GITLAB_HOST": "$gitlab_host"
-      }
-    }
-  }
-}
-MCPEOF
-  fi
-  
-  echo "  ✓ MCP server configured at: $mcp_config_file"
-  echo "  ✓ GitLab host: $gitlab_host"
-  echo ""
-}
-
-echo "🚀 Portal Skills - Kiro Hooks Installer"
+echo "🚀 Skills for Real Engineers — Kiro Hooks Installer"
 echo ""
 
 # Auto-detect skills installed by `npx skills add` in .agents/skills/
@@ -287,11 +219,9 @@ fi
 
 # Check for specific skill argument
 if [ -n "$1" ]; then
-  # User specified skills manually
   SELECTED_SKILLS=("$@")
   echo "Installing hooks for specified skills..."
 elif [ ${#INSTALLED_SKILLS[@]} -gt 0 ]; then
-  # Auto-detected skills from .agents/skills/
   SELECTED_SKILLS=("${INSTALLED_SKILLS[@]}")
   echo "Detected skills installed via 'npx skills add':"
   for skill in "${INSTALLED_SKILLS[@]}"; do
@@ -300,43 +230,24 @@ elif [ ${#INSTALLED_SKILLS[@]} -gt 0 ]; then
   echo ""
   echo "Installing Kiro hooks for these skills..."
 else
-  # No skills found
   echo "❌ No skills detected."
   echo ""
   echo "First, install skills using:"
-  echo "  npx skills add habonn/portal-skills"
+  echo "  npx skills@latest add habonn/portal-skills"
   echo ""
   echo "Or specify skills manually:"
-  echo "  curl -fsSL https://raw.githubusercontent.com/habonn/portal-skills/main/install.sh | bash -s -- commit e2e"
+  echo "  curl -fsSL https://raw.githubusercontent.com/habonn/portal-skills/main/install.sh | bash -s -- grill-me tdd commit-msg"
   exit 1
 fi
 
-# Install hooks for selected skills
 echo ""
 for skill in "${SELECTED_SKILLS[@]}"; do
   create_hook "$skill"
-done
-
-# Check if code-review skill is being installed and setup MCP
-for skill in "${SELECTED_SKILLS[@]}"; do
-  if [ "$skill" = "code-review" ]; then
-    # Find the skill path
-    if [ -d ".agents/skills/code-review" ]; then
-      setup_code_review_mcp ".agents/skills/code-review"
-    elif [ -d "code-review" ]; then
-      setup_code_review_mcp "code-review"
-    fi
-    break
-  fi
 done
 
 echo ""
 echo "✅ Kiro hooks installed!"
 echo ""
 echo "Usage:"
-echo "  • Chat: Ask Kiro naturally (e.g., 'commit my changes')"
+echo "  • Chat: Ask Kiro naturally (e.g., 'grill me', 'commit my changes', 'debug this')"
 echo "  • Hooks: Agent Hooks panel → click play button"
-echo ""
-echo "For code-review skill:"
-echo "  • Say: '/code-review https://gitlab.com/group/project/-/merge_requests/123'"
-echo "  • Or: 'review this MR: <url>'"

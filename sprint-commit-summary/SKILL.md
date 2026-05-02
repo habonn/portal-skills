@@ -1,6 +1,12 @@
 ---
 name: sprint-commit-summary
-description: Generate sprint commit summaries by analyzing git commits across a 2-week sprint period. Supports date range input like "6-17" for quick sprint specification.
+description: |
+  Generate sprint commit summaries by analyzing git commits across a
+  2-week sprint period. Supports date range input like "6-17" for quick
+  sprint specification.
+  USE FOR: sprint reviews, demo prep, 2-week summaries, sprint statistics.
+  DO NOT USE FOR: daily summaries (use daily-commit-summary), writing
+  commits (use commit-msg).
 ---
 
 # Sprint Commit Summary Skill
@@ -184,7 +190,7 @@ Total: XX commits across X repositories in 2-week sprint 🎉
 
 ## 🔄 TRANSFORMATION RULES
 
-Reference: Uses Conventional Commits format from #[[file:commit/SKILL.md]]
+Reference: Uses Conventional Commits format from #[[file:commit-msg/SKILL.md]]
 
 Parse commits using Conventional Commits format: `<type>(<scope>): <description>`
 
